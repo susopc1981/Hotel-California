@@ -4,11 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hotel California</title>
-    <link rel="stylesheet" href="./bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $(function () {
+        $("#checkInDate").datepicker();
+      });
+    </script>
+    <script>
+      $(function () {
+        $("#checkOutDate").datepicker();
+      });
+    </script>
+    <script>
+      $(function () {
+        $("#inVoiceDataCheckOut").datepicker();
+      });
+    </script>
+    <!-- <link rel="stylesheet" href="./bootstrap.min.css" />  -->
+
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="bg-info text-white">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-12">
           <h1 class="text-center">Hotel California</h1>
@@ -16,7 +45,7 @@
         <div class="col-12 text-center mt-5">
           <button id="btn-checkin" class="btn btn-dark mr-2">Check-In</button>
           <button id="btn-checkout" class="btn btn-dark mr-2">Check-Out</button>
-          <button id="btn-invoice" class="btn btn-dark mr-2">
+          <button id="btn-invoice" class="btn btn-dark mr-2" type="button">
             Sacar Factura
           </button>
           <button id="btn-changeroom" class="btn btn-dark mr-2">
@@ -24,38 +53,583 @@
           </button>
           <button id="btn-rooms" class="btn btn-dark">Habitaciones</button>
         </div>
-        <div class="col-12">
-          <form id="checkinform">
-            <label>Nombre</label>
-            <input type="text" />
-            <div id="adults">
-              <label>Adultos</label>
-              <button id="btn-addAdult">Añadir adulto</button>
+        <div class="col-12 mb-5" id="checkInFormContainer">
+          <div class="col-12 mt-5 text-center">
+            <h2 class="text-center mb-3">Check-In</h2>
+            <button
+              type="button"
+              id="btn-dataUsers"
+              class="btn btn-primary text-white rounded"
+            >
+              Datos Usuarios
+            </button>
+            <button
+              type="button"
+              id="btn-dataRooms"
+              class="btn btn-primary ml-2 text-white rounded"
+              disabled
+            >
+              Seleccionar habitacion(es)
+            </button>
+          </div>
+          <div></div>
+          <div class="row d-flex mt-3 justify-content-center width100">
+            <div class="col-6 bg-dark rounded">
+              <form id="checkInForm">
+                <div class="d-flex flex-column mt-3">
+                  <label>DNI</label>
+                  <input id="checkInDni" type="text" class="checkInDni" />
+                  <label>Nombre</label>
+                  <input id="checkInName" type="text" />
+                  <label>Apellidos</label>
+                  <input id="checkInSurname" type="text" />
+                  <div class="row mt-2">
+                    <div class="col-6 d-flex flex-column">
+                      <label>Año nacimiento</label>
+                      <input id="checkInYear" type="text" class="checkInYear" />
+                      <label>Teléfono</label>
+                      <input type="text" id="checkInTlf" class="checkInDni" />
+                    </div>
+                    <div class="col-6 d-flex flex-column">
+                      <label>Check-In:</label>
+                      <input type="text" id="checkInDate" />
+                      <label>Check-Out:</label>
+                      <input type="text" id="checkOutDate" />
+                    </div>
+                  </div>
+
+                  <div id="checkInAdults" class="mt-3">
+                    <label class="mr-1">Adultos</label>
+                    <button
+                      id="btn-addAdult"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#addAdultModal"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <select
+                      id="checkInAdultsSelect"
+                      size="0"
+                      class="d-none"
+                    ></select>
+                    <button id="removeAdult" class="d-none">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <div
+                      class="modal fade text-primary"
+                      id="addAdultModal"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden="true"
+                    >
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                              Añadir Usuario
+                            </h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form id="addAdultForm">
+                              <label for="recipient-name" class="col-form-label"
+                                >DNI</label
+                              >
+                              <input
+                                type="text"
+                                class="form-control checkInDni"
+                                id="addAdultDni"
+                              />
+                              <label for="message-text" class="col-form-label"
+                                >Nombre</label
+                              >
+                              <input
+                                type="text"
+                                id="addAdultName"
+                                class="form-control"
+                              />
+                              <label for="message-text" class="col-form-label"
+                                >Apellidos</label
+                              >
+                              <input
+                                type="text"
+                                id="addAdultSurname"
+                                class="form-control"
+                              />
+                              <label for="message-text" class="col-form-label"
+                                >Año Nacimiento</label
+                              >
+                              <input
+                                type="text"
+                                id="addAdultYear"
+                                class="form-control checkInDni"
+                              />
+                              <label for="message-text" class="col-form-label"
+                                >Teléfono</label
+                              >
+                              <input
+                                type="text"
+                                id="addAdultTlf"
+                                class="form-control checkInDni"
+                              />
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              id="btn-closeAddAdultForm"
+                              type="button"
+                              class="btn btn-secondary"
+                              data-dismiss="modal"
+                            >
+                              Cerrar
+                            </button>
+                            <button
+                              id="btn-addAdultForm"
+                              type="button"
+                              class="btn btn-primary"
+                            >
+                              Añadir
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="children">
+                    <label class="mr-3">Niños</label>
+                    <button
+                      id="btn-addChildren"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#addAdultModal"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <select
+                      id="checkInChildren"
+                      size="0"
+                      class="d-none"
+                    ></select>
+                    <button id="removeChildren" class="d-none">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                  <input
+                    class="addAdultButton align-self-center mb-3"
+                    type="submit"
+                    value="Enviar"
+                    id="checkInFormSubmit"
+                  />
+                </div>
+              </form>
             </div>
-            <div id="children">
-              <label>Niños</label>
-              <button id="btn-addChildren">Añadir niño</button>
+            <div class="col-12 mt-3">
+              <div class="row d-none" id="selectRoomForm">
+                <div class="col-6 d-flex flex-column">
+                  <div class="d-flex flex-row justify-content-center">
+                    <button class="mr-2" type="button" id="btn-selectRoom">
+                      Lista de Habitaciones
+                    </button>
+                    <button type="button" id="btn-selectCapacity" class="mr-2">
+                      Capacidad
+                    </button>
+                    <button type="button" id="btn-selectNumRooms">
+                      Selección automática
+                    </button>
+                  </div>
+                  <form id="form-selectRoom" class="mt-3">
+                    <div class="text-center">
+                      <label>Ver habitaciones por planta</label>
+                      <select id="selectRoomByFloor"></select>
+                    </div>
+                    <div class="text-center my-2">
+                      <button
+                        id="btn-emptyRooms"
+                        type="button"
+                        class="btn btn-success"
+                      >
+                        Libres
+                      </button>
+                      <button
+                        id="btn-fullRooms"
+                        type="button"
+                        class="btn btn-danger"
+                      >
+                        Ocupadas
+                      </button>
+                      <button
+                        id="btn-allRooms"
+                        type="button"
+                        class="btn btn-dark"
+                      >
+                        Todas
+                      </button>
+                    </div>
+                  </form>
+                  <form id="form-selectCapacity" class="d-none">
+                    <label>Habitación 1</label>
+                    <input type="text" id="form-selectCapacity-numRoom" />
+                    <input
+                      type="submit"
+                      id="form-selectCapacity-submit"
+                      value="Enviar"
+                    />
+                  </form>
+                  <form id="form-selectNumRooms" class="d-none">
+                    <label>Numero de habitaciones</label>
+                    <input type="text" id="form-selectNumRooms-qty" />
+                    <input
+                      type="submit"
+                      id="form-selectNumRooms-submit"
+                      value="Enviar"
+                    />
+                  </form>
+                  <table
+                    class="table table-hover rounded border bg-white"
+                    id="tableRooms"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">Numero Hab</th>
+                        <th scope="col">Capacidad Max</th>
+                        <th scope="col">Precio/Noche</th>
+                        <th scope="col">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div class="col-6">
+                  <h5 class="text-center">Datos Usuario</h5>
+                  <div class="d-flex flex-column bg-white rounded text-dark">
+                    <div>
+                      <label class="ml-3 mr-1">Nombre:</label>
+                      <label id="userNameLabel"></label>
+                    </div>
+                    <div>
+                      <label class="ml-3 mr-1">DNI:</label>
+                      <label id="userDniLabel"></label>
+                    </div>
+                    <div>
+                      <label class="ml-3 mr-1">Teléfono:</label>
+                      <label id="userTlfLabel"></label>
+                    </div>
+                    <div>
+                      <label class="ml-3 mr-1">Adultos:</label>
+                      <label id="userAdultLabel"></label>
+                      <label class="mr-1">Niños:</label>
+                      <label id="userChildrenLabel"></label>
+                    </div>
+                  </div>
+                  <span id="selectedRooms" class="d-none">
+                    <div class="d-flex flex-column text-center mt-4">
+                      <h5>Habitaciones</h5>
+                      <div
+                        class="bg-white rounded text-dark align-self-center minWidth"
+                        id="roomsToReserve"
+                      ></div>
+                      <button
+                        id="btn-finalCheckIn"
+                        type="button"
+                        class="btn btn-success mt-5"
+                      >
+                        CHECK IN
+                      </button>
+                    </div>
+                  </span>
+                </div>
+              </div>
             </div>
-            <label>Teléfono</label>
-            <input type="text" />
+          </div>
+        </div>
+        <div class="col-12 mb-5 d-none" id="checkOutFormContainer">
+          <h2 class="mb-3 mt-5 text-center">Check-Out</h2>
+          <div class="d-flex justify-content-center">
+            <form id="checkOutForm">
+              <label>DNI:</label>
+              <input type="text" id="checkOutDni" />
+              <input type="submit" class="btn btn-primary" value="Enviar" />
+            </form>
+          </div>
+          <div
+            id="checkOutInVoice"
+            class="row bg-white rounded text-dark d-none mt-4 px-3 mx-3"
+          >
+            <div class="col-12">
+              <h2 id="inVoice" class="text-center">Factura</h2>
+            </div>
+
+            <div id="inVoiceUserData" class="col-6 d-flex flex-column">
+              <label id="checkOutInVoiceName"></label>
+              <label id="checkOutInVoiceDni"></label>
+              <label id="checkOutInVoiceTlf"></label>
+            </div>
+            <div
+              id="inVoiceHotelData"
+              class="col-6 d-flex flex-column align-items-end"
+            >
+              <label id="checkOutHotelName">Hotel California</label>
+              <label id="checkOutHotelAddress">C/Venice Boulevard 4</label>
+              <label id="checkOutHotelDni">CIF: A32556428J</label>
+              <label id="checkOutHotelTlf">TLF: 1-800-949-5650.</label>
+            </div>
+            <div id="printedInVoice" class="col-12 border-top mt-5">
+              <table id="dataInVoiceUser" class="table table-borderless">
+                <thead>
+                  <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col" style="width: 70px !important;">Total</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-12 d-flex justify-content-center mt-3">
+            <button
+              type="button"
+              class="btn btn-primary d-none"
+              id="confirmCheckOut"
+            >
+              Check-Out
+            </button>
+          </div>
+        </div>
+        <div class="col-12 mb-5 d-none" id="inVoiceFormContainer">
+          <form id="inVoiceForm" class="col-12 text-center">
+            <h2 class="mt-5 mb-3">Imprimir Factura</h2>
+            <div>
+              <label>DNI:</label>
+              <input type="text" id="inVoiceDni" />
+              <input type="submit" class="btn btn-primary" />
+            </div>
           </form>
+          <div id="inVoiceData" class="row d-none justify-content-center">
+            <div class="col-6 bg-white rounded text-dark d-flex flex-column">
+              <div><label>DNI:</label> <label id="inVoiceDataDni"></label></div>
+              <div>
+                <label>Nombre:</label> <label id="inVoiceDataName"></label>
+              </div>
+              <div><label>TLF:</label> <label id="inVoiceDataTlf"></label></div>
+              <div><label>Edad</label> <label id="inVoiceDataAge"></label></div>
+              <div>
+                <label>Adultos:</label>
+                <label id="inVoiceDataAdults"></label>
+                <label>Niños:</label>
+                <label id="inVoiceDataChildren"></label>
+              </div>
+              <div>
+                <label>CheckIn:</label> <label id="inVoiceDataCheckIn"></label>
+              </div>
+              <div>
+                <label>CheckOut</label>
+                <input type="text" id="inVoiceDataCheckOut" class="border-0" />
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary minWidth align-self-center mb-3"
+                id="showInVoice"
+              >
+                Mostrar Factura
+              </button>
+            </div>
+            <div id="inVoiceContainer" class="col-6 d-none">
+              <div
+                class="bg-white rounded text-dark d-flex flex-column"
+                id="inVoiceText"
+              >
+                <h2 class="text-center my-3">Factura</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-5 d-none" id="changeRoomFormContainer">
+          <form id="changeRoomForm" class="text-center">
+            <h2 class="mb-3 mt-5">Cambiar habitación</h2>
+            <label class="mr-2 mt-3">DNI:</label>
+            <input type="text" class="" id="changeRoomDni" />
+            <input type="submit" class="btn btn-primary" value="Enviar" />
+          </form>
+          <div id="changeRoomData" class="row d-none justify-content-around">
+            <div
+              class="col-5 px-2 bg-white rounded text-dark d-flex flex-column"
+            >
+              <div>
+                <label>DNI:</label> <label id="changeRoomDataDni"></label>
+              </div>
+              <div>
+                <label>Nombre:</label> <label id="changeRoomDataName"></label>
+              </div>
+              <div>
+                <label>TLF:</label> <label id="changeRoomDataTlf"></label>
+              </div>
+              <div>
+                <label>Edad</label> <label id="changeRoomDataAge"></label>
+              </div>
+              <div>
+                <label>Adultos:</label>
+                <label id="changeRoomDataAdults"></label>
+                <label>Niños:</label>
+                <label id="changeRoomDataChildren"></label>
+              </div>
+              <div>
+                <label>Habitacion(es):</label>
+                <span id="changeRoomDataRooms"></span>
+              </div>
+            </div>
+            <div
+              id="dataSelectedRoom"
+              class="col-5 d-none bg-white rounded text-dark px-2"
+            >
+              <div class="d-flex flex-column">
+                <div>
+                  <label>Num Habitacion:</label>
+                  <label id="dataNumRoom"></label>
+                </div>
+                <div>
+                  <label>Capacidad:</label> <label id="dataMaxCapacity"></label>
+                </div>
+                <div>
+                  <label>Precio/Noche</label> <label id="dataPriceRoom"></label>
+                </div>
+              </div>
+            </div>
+            <div id="tableChangeRoom" class="col-12 d-none">
+              <div class="mt-3">
+                <div class="text-center">
+                  <label>Ver habitaciones por planta</label>
+                  <select id="selectRoomByFloorChangeRoom"></select>
+                </div>
+                <div class="text-center my-2"></div>
+              </div>
+              <table class="table table-hover" id="tableChangeRooms">
+                <thead>
+                  <tr>
+                    <th scope="col">Numero Hab</th>
+                    <th scope="col">Capacidad Max</th>
+                    <th scope="col">Precio/Noche</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-5 d-none" id="listRoomsUsersContainer">
+          <div class="d-flex flex-column justify-content-center">
+            <h2 class="mt-5 text-center">Listado Usuarios/Habitaciones</h2>
+            <div class="text-center mt-3 mb-3">
+              <button
+                id="btn-listRooms"
+                type="button"
+                class="btn btn-primary mr-3"
+              >
+                Habitaciones
+              </button>
+              <button id="btn-listUsers" type="button" class="btn btn-primary">
+                Usuarios
+              </button>
+            </div>
+            <div id="tableListRoomsContainer">
+              <div class="d-flex flex-column justify-content-center">
+                <div class="text-center">
+                  <label>Selecciona una planta</label>
+                  <select id="selectRoomListRooms"></select>
+                </div>
+                <div id="statusbuttons" class="text-center mb-3 mt-3">
+                  <button
+                    id="showAllRoomsListRoom"
+                    type="button"
+                    class="btn btn-dark mr-2"
+                    value="all"
+                  >
+                    Todas
+                  </button>
+                  <button
+                    id="showEmptyRoomsListRoom"
+                    type="button"
+                    class="btn btn-success"
+                    value="empty"
+                  >
+                    Libres
+                  </button>
+                  <button
+                    id="showFullRoomsListRoom"
+                    type="button"
+                    class="btn btn-danger ml-2"
+                    value="full"
+                  >
+                    Ocupadas
+                  </button>
+                </div>
+              </div>
+              <table
+                class="table table-hover bg-white border"
+                id="tableListRooms"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Numero Hab</th>
+                    <th scope="col">Capacidad Max</th>
+                    <th scope="col">Precio/Noche</th>
+                    <th scope="col">Estado</th>
+                    <th class="text-right" scope="col">Datos</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="tableListUsersContainer" class="d-none">
+              <table
+                class="table table-hover bg-white border"
+                id="tableListUsers"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Id. Usuario</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Edad</th>
+                    <th scope="col">Teléfono</th>
+                    <th class="text-right" scope="col">Datos</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <script src="./script.js" type="module"></script>
     <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      src="https://kit.fontawesome.com/103d4b6503.js"
       crossorigin="anonymous"
     ></script>
+    <!-- <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script> -->
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
       crossorigin="anonymous"
     ></script>
     <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
       crossorigin="anonymous"
     ></script>
   </body>
